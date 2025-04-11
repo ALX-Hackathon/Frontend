@@ -1,3 +1,20 @@
+/* src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-neutral-light font-sans text-neutral-darker antialiased;
+    /* Choose a base font-family in tailwind.config.js or here */
+    /* font-family: 'Inter', sans-serif; */
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold text-neutral-darkest;
+  }
+  /* Define base link styles if needed */
+  /* a {
+    @apply text-primary hover:text-primary-dark transition-colors;
+  } */
+}
+
