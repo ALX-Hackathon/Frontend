@@ -6,7 +6,7 @@ import Card from "../components/ui/Card";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import Alert from "../components/ui/Alert"; // Assuming you have an Alert component
-import { AuthStore } from "../store/Store"; // Adjust the import path as necessary
+import { AuthStore } from "../Store/Store"; // Adjust the import path as necessary
 import { loginUser } from "../Services/LoginService"; // Adjust the import path as necessary
 const LoginPage = () => {
   const navigate = useNavigate();
