@@ -1,67 +1,81 @@
 // src/chatbot/ActionProvider.js
-// This class defines the actions the bot can take (i.e., sending messages back).
+import axios from 'axios'; // Need axios for API calls
+import { API_BASE_URL } from '../../config/api'; // Adjust path as needed
+
 class ActionProvider {
-  constructor(createChatBotMessage, setStateFunc, createClientMessage) {
-    this.createChatBotMessage = createChatBotMessage;
-    this.setState = setStateFunc;
-    this.createClientMessage = createClientMessage; // Useful for adding messages programmatically
-  }
+    constructor(createChatBotMessage, setStateFunc, createClientMessage) {
+        this.createChatBotMessage = createChatBotMessage;
+        this.setState = setStateFunc;
+        this.createClientMessage = createClientMessage;
+        // Internal loading state
+        this.setChatbotLoading = (loading) => {
+            this.setState(prevState => ({
+                ...prevState,
+                loading: loading, // Assumes 'loading' state exists in react-chatbot-kit state
+            }));
+        };
+    }
 
-  // Function to send a simple text message from the bot
-  sendMessage = (text, options = {}) => {
-    const message = this.createChatBotMessage(text, options);
-    this._updateChatbotState(message);
-  };
+     // Sends user message to backend proxy, receives AI response
+     handleUserMessage = async (userMessage) => {
+        // Optional: Show user message immediately while waiting for backend
+        // const clientMsg = this.createClientMessage(userMessage);
+        // this._updateChatbotState(clientMsg); // Commented out: react-chatbot-kit adds user message automatically
 
-  greet = () => {
-    this.sendMessage("Hello there! Nice to chat with you.");
-  };
+        this.setChatbotLoading(true); // Indicate bot is "thinking"
 
-  handleWifiInquiry = () => {
-     // Replace with actual info or logic to fetch it
-     const wifiInfo = "The Wi-Fi network is 'HabeshaHub_Guest' and the password is 'Hospitality2025'. Enjoy your stay!";
-     this.sendMessage(wifiInfo);
-  };
+         try {
+            const response = await axios.post(`${API_BASE_URL}/chat/message`, {
+                message: userMessage,
+             });
 
-   handleBreakfastInquiry = () => {
-     const breakfastInfo = "Breakfast is served daily from 7:00 AM to 10:00 AM in the main dining hall on the ground floor.";
-      this.sendMessage(breakfastInfo);
-  };
+            if (response.data && response.data.reply) {
+                this.sendMessage(response.data.reply); // Send AI reply
+             } else {
+                // Handle cases where backend might succeed but send no reply (shouldn't happen)
+                this.handleErrorResponse("Sorry, I received an empty response.");
+            }
 
-  handleCheckoutInquiry = () => {
-     const checkoutInfo = "Standard check-out time is 11:00 AM. If you need a later check-out, please contact the front desk.";
-      this.sendMessage(checkoutInfo);
-  };
-
-  handleAttractionsInquiry = () => {
-     const attractionsInfo = "Near the hotel, you can visit the National Museum, Holy Trinity Cathedral, and Merkato market. Ask the concierge for maps and tours!";
-      this.sendMessage(attractionsInfo);
-  };
-
-  // --- Placeholder for Conversational Feedback (Future) ---
-   handleGeneralFeedback = () => {
-       // In a real app, this might trigger a more complex flow asking for details
-       // or just direct the user to the feedback form.
-        const feedbackResponse = "Thanks for wanting to share feedback! For detailed comments, please use our dedicated Feedback form found in the navigation menu. Is there anything else I can help you find?";
-       this.sendMessage(feedbackResponse);
+        } catch (error) {
+             console.error("Error communicating with chat backend:", error);
+            const errorMessage = error.response?.data?.error || "Sorry, I couldn't connect to the chat service right now.";
+             this.handleErrorResponse(errorMessage);
+        } finally {
+             this.setChatbotLoading(false); // Stop loading indicator
+         }
     };
-   // --- End Placeholder ---
+
+    // Helper to send a standard bot message
+    sendMessage = (text) => {
+         const message = this.createChatBotMessage(text);
+        this._updateChatbotState(message);
+    };
+
+    // Helper to send an error message formatted as a bot message
+    handleErrorResponse = (errorText) => {
+         const message = this.createChatBotMessage(`Error: ${errorText}`, {
+             widget: 'errorWidget', // You could potentially add a specific error widget/style
+             payload: { error: true }, // Add metadata if needed
+             type: 'error', // Set message type if supported/useful
+         });
+        this._updateChatbotState(message);
+    };
 
 
-   handleUnknown = () => {
-      const unknownResponse = "Sorry, I didn't quite understand that. I can help with questions about Wi-Fi, breakfast times, check-out, and local attractions. Could you please rephrase?";
-      this.sendMessage(unknownResponse);
-  };
+     _updateChatbotState = (message) => {
+        this.setState(prevState => ({
+          ...prevState,
+          messages: [...prevState.messages, message],
+        }));
+      };
 
 
-  // Helper function to add new messages to the chatbot state
-  _updateChatbotState = (message) => {
-    // NOTE: This function updates the state array. Ensure it doesn't mutate directly.
-    this.setState(prevState => ({
-      ...prevState,
-      messages: [...prevState.messages, message],
-    }));
-  };
+    // --- REMOVE all the previous keyword handler methods ---
+    // greet = () => { ... };             <== DELETE
+    // handleWifiInquiry = () => { ... }; <== DELETE
+    // handleBreakfastInquiry = () => { ... }; <== DELETE
+    // ... etc ...
+    // handleUnknown = () => { ... };      <== DELETE
 }
 
 export default ActionProvider;
