@@ -26,61 +26,81 @@ const AdminDashboardPage = () => {
     const [isPolling, setIsPolling] = useState(true);
     const [isManualLoading, setIsManualLoading] = useState(false);
     const pollIntervalRef = useRef(null);
+    const lastFetchTimeRef = useRef(null);
 
-    // Memoized fetch function
+    // Optimized fetch function with debouncing and state management
     const fetchFeedback = useCallback(async (manual = false) => {
-        if (!manual && isLoading) {
-            // console.log("Fetch already in progress, skipping poll cycle.");
+        // Prevent concurrent fetches unless manual
+        if (!manual && (isLoading || isManualLoading)) {
             return;
         }
 
-        if (manual) setIsManualLoading(true);
-        setError(null); // Clear previous errors on new fetch attempt
+        // Debounce rapid manual refreshes
+        const now = Date.now();
+        if (manual && lastFetchTimeRef.current && now - lastFetchTimeRef.current < 2000) {
+            toast.error("Please wait a moment before refreshing again");
+            return;
+        }
 
-        const config = { method: 'get', url: `${API_BASE_URL}/feedback` };
+        if (manual) {
+            setIsManualLoading(true);
+            lastFetchTimeRef.current = now;
+        }
+
+        setError(null);
 
         try {
-            // console.log(manual ? "Manual fetch initiated..." : "Background fetch initiated...");
-            const newData = await fetchFeedbackApi(config);
-            // Feedback shown by hook on error, toast on manual success maybe
+            const newData = await fetchFeedbackApi({
+                method: 'get',
+                url: `${API_BASE_URL}/feedback`
+            });
+
             if (manual && newData !== null) {
                 toast.success("Dashboard refreshed!");
             }
-        } catch (unexpectedError) {
-            console.error("Unexpected error during fetchFeedback orchestration:", unexpectedError);
-            setError("An unexpected client-side error occurred."); // Use hook's setError
-            if (manual) toast.error("An unexpected error occurred during refresh.");
+        } catch (error) {
+            console.error("Error fetching feedback:", error);
+            setError("An unexpected error occurred while fetching data.");
+            if (manual) {
+                toast.error("Failed to refresh dashboard");
+            }
         } finally {
-            if (manual) setIsManualLoading(false);
+            if (manual) {
+                setIsManualLoading(false);
+            }
         }
-    }, [fetchFeedbackApi, isLoading, setError]);
+    }, [fetchFeedbackApi, isLoading, isManualLoading, setError]);
 
-    // Effect for polling management
+    // Optimized polling effect
     useEffect(() => {
-        fetchFeedback(true); // Initial fetch
+        // Initial fetch
+        fetchFeedback(true);
 
-        if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
-        pollIntervalRef.current = null;
-
+        // Setup polling
         if (isPolling) {
-            // console.log(`Dashboard: Starting polling every ${POLLING_INTERVAL / 1000}s`);
             pollIntervalRef.current = setInterval(() => {
-                // console.log("Dashboard: Polling...");
-                fetchFeedback(false); // Background fetch
+                fetchFeedback(false);
             }, POLLING_INTERVAL);
-        } else {
-            // console.log("Dashboard: Polling stopped.");
         }
 
-        // Cleanup interval on unmount or when polling stops
+        // Cleanup
         return () => {
             if (pollIntervalRef.current) {
-                // console.log("Dashboard: Clearing interval on cleanup.");
                 clearInterval(pollIntervalRef.current);
                 pollIntervalRef.current = null;
             }
         };
     }, [isPolling, fetchFeedback]);
+
+    // Memoized refresh handler
+    const handleManualRefresh = useCallback(() => {
+        fetchFeedback(true);
+    }, [fetchFeedback]);
+
+    // Memoized polling toggle handler
+    const handlePollingToggle = useCallback(() => {
+        setIsPolling(prev => !prev);
+    }, []);
 
     // Determine when to show the main loading spinner
     const showLoadingIndicator = (isLoading && feedbackData === null) || isManualLoading;
@@ -94,15 +114,15 @@ const AdminDashboardPage = () => {
                 </h1>
                 <div className='flex items-center justify-start sm:justify-end gap-2 flex-wrap'>
                     <Button
-                        onClick={() => fetchFeedback(true)}
-                        disabled={isManualLoading || (isLoading && !feedbackData)} // Prevent click if initial load ongoing
+                        onClick={handleManualRefresh}
+                        disabled={isManualLoading || (isLoading && !feedbackData)}
                         isLoading={isManualLoading}
                         size="sm"
                     >
                         Refresh Now
                     </Button>
                     <Button
-                        onClick={() => setIsPolling(prev => !prev)}
+                        onClick={handlePollingToggle}
                         variant={isPolling ? "warning" : "secondary"}
                         size="sm"
                     >
