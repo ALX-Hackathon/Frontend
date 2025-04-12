@@ -12,40 +12,47 @@ const AppLayout = () => {
   const [showChatbot, setShowChatbot] = useState(false); // State to toggle chatbot
 
   const toggleChatbot = () => {
-    setShowChatbot((prev) => !prev);
+    setShowChatbot(prev => !prev);
   };
+
 
   return (
     <div className="min-h-screen flex flex-col bg-neutral-light">
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-        toastOptions={{ duration: 5000 }}
-      />
+       {/* Toast Container */}
+      <Toaster position="top-right" reverseOrder={false} toastOptions={{ duration: 5000 }} />
+
+       {/* Navbar */}
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 py-6 md:py-8">
-        <Outlet />
-      </main>
-      <Footer />
-      <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end">
-        {showChatbot && (
-          <div className="chatbot-container mb-2 shadow-none rounded-lg overflow-hidden border border-neutral p-8 items-bottom bg-white dark:bg-neutral-darkest dark:border-neutral-dark">
-            <Chatbot />
-          </div>
-        )}
-        <button
-          onClick={toggleChatbot}
-          className="bg-primary hover:bg-primary-dark text-white p-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors duration-200 flex items-center justify-center"
-          aria-label={showChatbot ? "Close Chatbot" : "Open Chatbot"}
-        >
-          {showChatbot ? (
-            <FaTimes className="w-6 h-6" /> // Close icon when open
-          ) : (
-            <FaCommentDots className="w-6 h-6" /> // Chat icon when closed
-          )}
-        </button>
-      </div>
-    </div>
+
+       {/* Main Content Area */}
+       <main className="flex-grow container mx-auto px-4 py-6 md:py-8"> {/* Adjusted padding */}
+        <Outlet /> {/* Child routes render here */}
+       </main>
+
+       {/* Footer */}
+      <Footer />{/* Chatbot Container & Trigger */}
+            <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end">
+               {/* Chatbot Window */}
+               {showChatbot && (
+                 <div className="chatbot-container mb-2 shadow-xl rounded-lg overflow-hidden border border-neutral"> {/* Custom class */}
+                    <AiChatbot /> {/* Render the new component */}
+                 </div>
+               )}
+      
+              {/* Chatbot Trigger Button (FAB) */}
+               <button
+                   onClick={toggleChatbot}
+                   className="bg-primary hover:bg-primary-dark text-white p-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors duration-200 flex items-center justify-center"
+                   aria-label={showChatbot ? "Close Chatbot" : "Open Chatbot"}
+               >
+                   {showChatbot ? (
+                      <FaTimes className="w-6 h-6" /> // Close icon when open
+                    ) : (
+                      <FaCommentDots className="w-6 h-6" /> // Chat icon when closed
+                    )}
+                </button>
+              </div>
+            </div>
   );
 };
 

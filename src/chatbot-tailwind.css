@@ -1,8 +1,21 @@
 /* --- Chatbot Container Styling --- */
+/* --- Chatbot Container Styling --- */
 .chatbot-container {
-    width: 360px; /* Typical chat width */
-    height: 520px; /* Adjusted height */
-    @apply shadow-xl rounded-lg border border-neutral overflow-hidden bg-white; /* Added explicit bg */
+    width: 30vw;
+    /* Typical chat width */
+    height: 520px;
+    /* Adjusted height */
+    margin-top: 100px;
+    /* Add margin to prevent overlap with other components */
+    /* Ensure it is positioned next to the icon */
+    position: absolute;
+    /* Position it relative to the parent container */
+    bottom: 20px;
+    /* Adjust to ensure it doesn't overlap with the navigation */
+    right: 65px;
+    /* Align it to the right side */
+    @apply shadow-xl rounded-lg border border-neutral overflow-hidden bg-white;
+    /* Added explicit bg */
 }
 
 .react-chatbot-kit-chat-container {
@@ -70,18 +83,3 @@
     width: 1.1em; /* Slightly larger icon */
     height: 1.1em;
  }
-
-
-/* --- Avatar Component Styling (inside BotAvatar.jsx) --- */
-/* Updated BotAvatar.jsx styling example: */
-/*
-   <div className="flex items-center justify-center w-7 h-7 rounded-full bg-primary-light text-primary-dark">
-       <FaRobot className="w-4 h-4"/>
-   </div>
-*/
-
-
-/* --- Loading Indicator (From react-chatbot-kit state) --- */
-/* If react-chatbot-kit exposes a loading class or uses its state */
-/* .react-chatbot-kit-chat-input-container .loading-indicator { ... } */
-/* Or potentially style based on data attributes if provided */
