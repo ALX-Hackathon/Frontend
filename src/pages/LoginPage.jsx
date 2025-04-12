@@ -1,13 +1,12 @@
 // src/pages/LoginPage.jsx
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../Hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";
 import Card from "../components/ui/Card";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import Alert from "../components/ui/Alert"; // Assuming you have an Alert component
-import { AuthStore } from "../Store/Store"; // Adjust the import path as necessary
-import { loginUser } from "../Services/LoginService"; // Adjust the import path as necessary
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -15,31 +14,35 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState(""); // In real app, use password input
   const [error, setError] = useState("");
-  const setLogin = AuthStore((state) => state.setLogin);
-  const setToken = (newToken) => AuthStore.setState({ token: newToken });
 
   // Determine where to redirect after login
-  const from = location.state?.from?.pathname || "/"; // Redirect to intended page or home
+  const from = location.state?.from?.pathname || "/admin/dashboard"; // Redirect to intended page or home
+
   const handleLogin = (e) => {
     e.preventDefault();
-    if (!username || !password) {
-      return;
+    setError(""); // Clear previous errors
+
+    // --- SIMULATED LOGIN ---
+    // Replace this with actual API call in real application
+    let simulatedUser = null;
+    if (username === "admin" && password === "password") {
+      simulatedUser = { name: "Admin User", role: "admin" };
+    } else if (username === "staff" && password === "password") {
+      simulatedUser = { name: "Staff Member", role: "staff" };
+    } else if (username === "user" && password === "password") {
+      // Generic logged-in user
+      simulatedUser = { name: "Guest User", role: "guest" }; // Role could be 'user' or 'guest'
     }
-    const endpoint = "https://backend-bhww.onrender.com/api/auth/login";
-    loginUser(username, password, endpoint)
-      .then((data) => {
-        setLoading(true);
-        setLogin(data);
-        setToken(data.token);
-      })
-      .then(() => {
-        if (data.role === "admin") {
-          navigate("/admin/dashboard");
-        } else {
-          navigate("/staff");
-        }
-      })
-      .catch((error) => {});
+
+    if (simulatedUser) {
+      login(simulatedUser);
+      navigate(from, { replace: true }); // Redirect after successful login
+    } else {
+      setError(
+        "Invalid username or password (Hint: try admin/password or staff/password)"
+      );
+    }
+    // --- END SIMULATED LOGIN ---
   };
 
   return (
