@@ -3,23 +3,26 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
+"scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "start": "vite preview"
+}
+,
   "dependencies": {
     "@material-tailwind/react": "^3.0.0-beta.24",
     "@tailwindcss/forms": "^0.5.10",
     "axios": "^1.8.4",
     "chart.js": "^4.4.8",
+    "lucide-react": "^0.487.0",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
     "react-chatbot-kit": "^2.2.2",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.55.0",
     "react-hot-toast": "^2.5.2",
     "react-icons": "^5.5.0",
+    "react-markdown": "^10.1.0",
     "react-router-dom": "^7.5.0",
     "zustand": "^5.0.3"
   },

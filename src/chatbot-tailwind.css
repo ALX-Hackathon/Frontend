@@ -1,89 +1,33 @@
-
-/* Basic container override */
-.chatbot-container {
-  /* Adjust width and height as needed for your design */
-  width: 350px;
-  height: 500px;
-  /* Ensure positioning or constraints if needed within the fixed container */
-}
-
-/* --- Example overrides - Inspect react-chatbot-kit elements to find correct selectors --- */
-
-/* Chat window background */
-.react-chatbot-kit-chat-container {
-  @apply bg-white rounded-lg h-full flex flex-col;
-  font-family: inherit; /* Inherit from body */
-}
-
-/* Chat header */
-.react-chatbot-kit-chat-header {
-  @apply bg-primary text-white p-3 text-sm font-semibold rounded-t-lg border-b border-primary-dark;
-}
-
-/* Chat message container */
-.react-chatbot-kit-chat-message-container {
-  @apply flex-grow overflow-y-auto p-3 space-y-3;
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: theme('colors.neutral.DEFAULT') theme('colors.neutral.light'); /* Firefox */
-}
-/* Webkit scrollbar */
-.react-chatbot-kit-chat-message-container::-webkit-scrollbar {
-  width: 8px;
-}
-.react-chatbot-kit-chat-message-container::-webkit-scrollbar-track {
-  background: theme('colors.neutral.light');
-  border-radius: 4px;
-}
-.react-chatbot-kit-chat-message-container::-webkit-scrollbar-thumb {
-  background-color: theme('colors.neutral.DEFAULT');
-  border-radius: 4px;
-  border: 2px solid theme('colors.neutral.light');
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 
-/* Bot message bubble */
-.react-chatbot-kit-chat-bot-message {
-  @apply bg-neutral-light text-neutral-darker p-2.5 rounded-lg rounded-bl-none max-w-[80%] mr-auto; /* Align left */
-}
-.react-chatbot-kit-chat-bot-message span { /* Style text inside */
-   @apply text-sm leading-relaxed;
-}
+@layer components {
 
+    /* Custom Scrollbar Styling */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        /* Width of the scrollbar */
+    }
 
-/* User message bubble */
-.react-chatbot-kit-chat-user-message {
-  @apply bg-primary text-white p-2.5 rounded-lg rounded-br-none max-w-[80%] ml-auto; /* Align right */
-}
-.react-chatbot-kit-chat-user-message span {
-   @apply text-sm leading-relaxed;
-}
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: theme('colors.neutral.lightest');
+        /* Light track background */
+        border-radius: 3px;
+    }
 
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: theme('colors.neutral.50');
+        /* Slightly darker thumb */
+        border-radius: 3px;
+        border: 1px solid theme('colors.neutral.lightest');
+        /* Creates padding around thumb */
+    }
 
-/* Input area */
-.react-chatbot-kit-chat-input-container {
-  @apply border-t border-neutral p-3;
-}
-.react-chatbot-kit-chat-input {
-  @apply w-full px-3 py-2 border border-neutral rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary mr-2;
-}
-.react-chatbot-kit-chat-btn-send {
-  @apply bg-primary hover:bg-primary-dark text-white p-2 rounded-md transition-colors duration-150 flex-shrink-0; /* Send button styling */
-}
-.react-chatbot-kit-chat-btn-send-icon /* Default Icon */ {
- fill: white; /* Make default icon white */
- width: 1em;
- height: 1em;
-}
-
-/* --- Avatar (Optional, if used) --- */
-/* Avatar container for bot messages */
-.react-chatbot-kit-chat-bot-avatar-container {
-   /* Styles if needed, maybe margin */
-   margin-right: 8px; /* Add space between avatar and bubble */
-}
-
-/* Make sure avatar doesn't cause misalignment if message is short */
-.react-chatbot-kit-chat-bot-message-container {
-   display: flex;
-   align-items: flex-end; /* Align bubble to bottom if avatar is taller */
+    /* For Firefox */
+    .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: theme('colors.neutral.50') theme('colors.neutral.lightest');
+    }
 }

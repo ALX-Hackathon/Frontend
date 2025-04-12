@@ -1,7 +1,7 @@
 // src/layouts/ProtectedRoute.jsx
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../Hooks/useAuth'; // Assuming you have an AuthContext
+import { useAuth } from '../../Hooks/useAuth'; // Adjust the import path as necessary
 import Spinner from '../../components/ui/Spinner'; // Assuming you have a Spinner component
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
