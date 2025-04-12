@@ -1,85 +1,33 @@
-/* --- Chatbot Container Styling --- */
-/* --- Chatbot Container Styling --- */
-.chatbot-container {
-    width: 30vw;
-    /* Typical chat width */
-    height: 520px;
-    /* Adjusted height */
-    margin-top: 100px;
-    /* Add margin to prevent overlap with other components */
-    /* Ensure it is positioned next to the icon */
-    position: absolute;
-    /* Position it relative to the parent container */
-    bottom: 20px;
-    /* Adjust to ensure it doesn't overlap with the navigation */
-    right: 65px;
-    /* Align it to the right side */
-    @apply shadow-xl rounded-lg border border-neutral overflow-hidden bg-white;
-    /* Added explicit bg */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+
+    /* Custom Scrollbar Styling */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        /* Width of the scrollbar */
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: theme('colors.neutral.lightest');
+        /* Light track background */
+        border-radius: 3px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: theme('colors.neutral.50');
+        /* Slightly darker thumb */
+        border-radius: 3px;
+        border: 1px solid theme('colors.neutral.lightest');
+        /* Creates padding around thumb */
+    }
+
+    /* For Firefox */
+    .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: theme('colors.neutral.50') theme('colors.neutral.lightest');
+    }
 }
-
-.react-chatbot-kit-chat-container {
-    @apply h-full flex flex-col font-sans; /* Apply base font */
-}
-
-.react-chatbot-kit-chat-header {
-     /* Subtle header, maybe align title left? */
-    @apply bg-neutral-lightest text-neutral-darkest p-3 text-sm font-medium rounded-t-lg border-b border-neutral;
-     /* Optional: Remove if using default headerText prop instead */
- }
-
-.react-chatbot-kit-chat-message-container {
-     @apply flex-grow overflow-y-auto p-4 space-y-3; /* Increased padding */
-    scrollbar-width: thin;
-     /* Adjusted scrollbar colors */
-    scrollbar-color: theme('colors.neutral.DEFAULT') theme('colors.neutral.lightest');
-}
-/* Webkit scrollbar */
-.react-chatbot-kit-chat-message-container::-webkit-scrollbar { width: 6px; }
-.react-chatbot-kit-chat-message-container::-webkit-scrollbar-track { background: theme('colors.neutral.lightest'); border-radius: 3px;}
-.react-chatbot-kit-chat-message-container::-webkit-scrollbar-thumb { background-color: theme('colors.neutral.DEFAULT'); border-radius: 3px; border: 1px solid theme('colors.neutral.lightest');}
-
-
- /* Base bubble style */
-.react-chatbot-kit-chat-bot-message, .react-chatbot-kit-chat-user-message {
-    @apply p-2.5 rounded-xl max-w-[85%]; /* Use softer rounding, slightly larger max-width */
-}
-.react-chatbot-kit-chat-bot-message span, .react-chatbot-kit-chat-user-message span {
-    @apply text-sm leading-snug; /* Adjust line height */
- }
-
- /* Bot message: Left aligned, distinct background */
-.react-chatbot-kit-chat-bot-message {
-    @apply bg-neutral-light text-neutral-darkest rounded-bl-md mr-auto; /* Square bottom-left */
-}
-/* Avatar container adjustments */
- .react-chatbot-kit-chat-bot-avatar-container { margin-right: 6px; align-self: flex-end; margin-bottom: 4px; } /* Align avatar bottom */
-.react-chatbot-kit-chat-bot-message-container { display: flex; align-items: flex-start; } /* Change alignment */
-
-
-/* User message: Right aligned, primary background */
- .react-chatbot-kit-chat-user-message {
-     @apply bg-primary text-white rounded-br-md ml-auto; /* Square bottom-right */
- }
-
-/* Input area */
- .react-chatbot-kit-chat-input-container {
-     @apply border-t border-neutral p-3 flex items-center gap-2; /* Use flex gap */
- }
-.react-chatbot-kit-chat-input {
-     /* Use Tailwind Forms plugin styles if installed, otherwise apply manually */
-     /* Requires @tailwindcss/forms: */
-     @apply block w-full rounded-md border-neutral shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 py-2 px-3 text-sm;
-     /* Manual styling (if forms plugin NOT used): */
-    /* @apply flex-grow px-3 py-2 border border-neutral rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary; */
-}
-.react-chatbot-kit-chat-btn-send {
-     /* Cleaner send button, maybe just an icon button? */
-     @apply bg-primary hover:bg-primary-dark text-white p-2 rounded-md transition-colors duration-150 flex-shrink-0 aspect-square flex items-center justify-center;
-     min-width: 36px; /* Ensure minimum tap size */
- }
- .react-chatbot-kit-chat-btn-send-icon {
-    fill: white;
-    width: 1.1em; /* Slightly larger icon */
-    height: 1.1em;
- }
