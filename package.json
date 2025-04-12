@@ -3,13 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "vite preview" // Add this line
-  },
+"scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "start": "vite preview"
+}
+,
   "dependencies": {
     "@material-tailwind/react": "^3.0.0-beta.24",
     "@tailwindcss/forms": "^0.5.10",
