@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -7,5 +7,6 @@ export default defineConfig({
   server: {
     host: true, // Allows hosting on the network
     port: 5173, // Optional: Specify a custom port (default is 5173)
+    allowedHosts: ["frontend-1-rg8j.onrender.com"], // Add the allowed host here
   },
-})
+});
