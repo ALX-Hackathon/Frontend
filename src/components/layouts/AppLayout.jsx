@@ -1,8 +1,8 @@
 import React, { useState } from "react"; // Import useState for managing state
 import { Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import Navbar from "./Navbar"; // Import Navbar
-import Footer from "./Footer"; // Import Footer
+import Navbar from "../feedback/Navbar"; // Import Navbar
+import Footer from "../feedback/Footer";
 import Chatbot from "../chatbot/Chatbot"; // Import Chatbot component
 import { FaTimes, FaCommentDots } from "react-icons/fa"; // Import icons
 import "react-chatbot-kit/build/main.css"; // Import default styles
