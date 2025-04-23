@@ -4,14 +4,15 @@ import { useState } from 'react'; // Import useState for managing state
 import { FaCommentDots, FaTimes } from 'react-icons/fa'; // Import icons for chat button
 import { Outlet } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import Navbar from './Navbar'; // Import Navbar
-import Footer from './Footer'; // Import Footer
-import Chatbot from 'react-chatbot-kit'; // Import Chatbot
-import 'react-chatbot-kit/build/main.css'; // Import default styles
-import config from '../chatbot/config.js'; // Import your config
-import MessageParser from '../chatbot/MessageParser.js'; // Import your parser
-import ActionProvider from '../chatbot/ActionProvider.js'; // Import your action provider
-
+import Navbar from './AppNavbar.jsx'; // Import Navbar
+import Footer from './AppFooter.jsx'; // Import Footer
+// import Chatbot from 'react-chatbot-kit'; // Import Chatbot
+// import 'react-chatbot-kit/build/main.css'; // Import default styles
+// import config from '../chatbot/config.js'; // Import your config
+// import MessageParser from '../chatbot/MessageParser.js'; // Import your parser
+// import ActionProvider from '../chatbot/ActionProvider.js'; // Import your action provider
+// Import the NEW Chatbot component
+import AiChatbot from '../chatbot/AiChatbot.jsx'; // Import your custom chatbot component
 import '../../chatbot-tailwind.css'; // Import custom styles for chatbot
 const AppLayout = () => {
   const [showChatbot, setShowChatbot] = useState(false); // State to toggle chatbot
@@ -40,12 +41,7 @@ const AppLayout = () => {
                {/* Chatbot Window */}
                {showChatbot && (
                  <div className="chatbot-container mb-2 shadow-xl rounded-lg overflow-hidden border border-neutral"> {/* Custom class */}
-                   <Chatbot
-                      config={config}
-                      messageParser={MessageParser}
-                      actionProvider={ActionProvider}
-                     // headerText='Chat with HahuBot' // Optional header override
-                   />
+                    <AiChatbot /> {/* Render the new component */}
                  </div>
                )}
       
